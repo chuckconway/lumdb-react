@@ -4,23 +4,28 @@ import './App.css';
 
 import Movie from './components/Movie';
 
-const movies = [
-  {
-    id:1,
-    title:'Superman'
-  },
-  {
-    id:2,
-    title:'Star Wars'
-  },
-  {
-    id:3,
-    title:'Batman'
+class App extends Component {
+  // https://api.themoviedb.org/3/movie/550?api_key=f782a6e83bfca41811cea57d88703694
+  // https://api.themoviedb.org/3/discover/movie?api_key=f782a6e83bfca41811cea57d88703694&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1
+
+  // default data
+  state = {
+    movies: [],
   }
 
-]
+  async componentDidMount() {
+    try{
+      const res = await fetch('https://api.themoviedb.org/3/discover/movie?api_key=f782a6e83bfca41811cea57d88703694&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1');
+      const movies = await res.json();
 
-class App extends Component {
+      this.setState({
+        movies: movies.results
+      });
+
+    } catch (e){
+      console.log(e)
+    }
+  }
 
   render() {
     return (
@@ -28,7 +33,7 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} alt=""/>
         </header>
-        {movies.map((movie) =>  <Movie key={movie.id} movie={movie} />)}
+        {this.state.movies.map((movie) =>  <Movie key={movie.id} movie={movie} />)}
       </div>
     );
   }
