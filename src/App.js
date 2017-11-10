@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link
+} from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 
 import Movie from './components/Movie';
+import MovieList from './components/MovieList';
+import MovieDetail from './components/MovieDetail';
+
 
 class App extends Component {
   // https://api.themoviedb.org/3/movie/550?api_key=f782a6e83bfca41811cea57d88703694
@@ -29,12 +38,19 @@ class App extends Component {
 
   render() {
     return (
+      <Router>
       <div className="App">
         <header className="App-header">
+        <Link to="/">
           <img src={logo} alt=""/>
+        </Link>          
         </header>
-        {this.state.movies.map((movie) =>  <Movie key={movie.id} movie={movie} />)}
+        <Switch>
+          <Route exact path="/" component={MovieList} />
+          <Route path="/:id" component={MovieDetail} />
+        </Switch>        
       </div>
+      </Router>
     );
   }
 }
